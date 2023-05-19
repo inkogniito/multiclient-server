@@ -55,19 +55,3 @@ void MyTcpServer::slotClientDisconnected(){
     QTcpSocket *curr_mTcpSocket = (QTcpSocket*)sender();
     curr_mTcpSocket->close();
 }
-
-
-/*
-void MyTcpServer::slotServerRead()
-{
-    QByteArray array;
-    while(mTcpSocket->bytesAvailable()>0)
-    {
-        array.append(mTcpSocket->readAll());
-    }
-    if (array.right(1) == "\n")
-    {
-        mTcpSocket->write(parse(array));
-    }
-}
-*/
