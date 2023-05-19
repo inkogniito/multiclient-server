@@ -5,8 +5,11 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
+#include <QSqlQuery>
+#include <QVariant>
 
-QByteArray reg(QString username, QString password);
+QByteArray reg(QString email, QString username, QString password);
+
 
 QByteArray login(QString username, QString password);
 

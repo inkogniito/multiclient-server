@@ -5,7 +5,6 @@
 
 MyTcpServer::~MyTcpServer()
 {
-    //mTcpSocket->close();
     mTcpServer->close();
     server_status=0;
 }
@@ -14,9 +13,12 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent){
     connect(mTcpServer, &QTcpServer::newConnection,
             this, &MyTcpServer::slotNewConnection);
 
-    if(!mTcpServer->listen(QHostAddress::Any, 33333)){
+    if(!mTcpServer->listen(QHostAddress::Any, 33333))
+    {
         qDebug() << "server is not started";
-    } else {
+    }
+    else
+    {
         server_status=1;
         qDebug() << "server is started";
     }

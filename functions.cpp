@@ -1,14 +1,43 @@
 #include "functions.h"
+#include "database.h" // Добавьте эту строку
 
 QByteArray reg(QString email, QString username, QString password)
 {
-    return QByteArray("Регистрация\n");
+    QSqlDatabase& db = Database::getInstance();
+    if (!db.isOpen()) {
+        return QByteArray("Ошибка подключения к базе данных!\n");
+    }
+
+    QSqlQuery query(db);
+    query.prepare("INSERT INTO users (email, username, password) VALUES (?, ?, ?)");
+    query.addBindValue(email);
+    query.addBindValue(username);
+    query.addBindValue(password);
+    if (query.exec()) {
+        return QByteArray("Регистрация успешна!\n");
+    } else {
+        return QByteArray("Ошибка при регистрации!\n");
+    }
 }
 
 QByteArray login(QString username, QString password)
 {
-    return QByteArray("Авторизация\n");
+    QSqlDatabase& db = Database::getInstance();
+    if (!db.isOpen()) {
+        return QByteArray("Ошибка подключения к базе данных!\n");
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT * FROM users WHERE username = ? AND password = ?");
+    query.addBindValue(username);
+    query.addBindValue(password);
+    if (query.exec() && query.next()) {
+        return QByteArray("Авторизация успешна!\n");
+    } else {
+        return QByteArray("Неправильный логин или пароль!\n");
+    }
 }
+
 
 QByteArray logout()
 {
@@ -22,7 +51,7 @@ QByteArray invalid()
 
 QByteArray help()
 {
-    return QByteArray("Как-нибудь потом помогу..\n");
+    return QByteArray("Cписок команд:\n1.reg - Регистрация(введите почту, имя пользователя и пароль через пробел.\n");
 }
 
 QByteArray parse(QString request)
