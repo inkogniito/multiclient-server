@@ -59,8 +59,14 @@ void MyTcpServer::slotServerRead()
         arr = arval.left(arval.length() - 2).split(" ");
         if (authstat.value(curr_mTcpSocket->socketDescriptor()) == 1)
         {
-            curr_mTcpSocket->write(parse(array, authstat.value(curr_mTcpSocket->socketDescriptor())));
-            qDebug() << authstat.value(curr_mTcpSocket->socketDescriptor()) << " " << curr_mTcpSocket->socketDescriptor() << " " << curr_mTcpSocket;
+            if (arr.size() == 1 and arr[0] == "logout")
+            {
+                curr_mTcpSocket->write(parse(array, authstat.value(curr_mTcpSocket->socketDescriptor())));
+                authstat[curr_mTcpSocket->socketDescriptor()] = 0;
+            }
+            else
+                curr_mTcpSocket->write(parse(array, authstat.value(curr_mTcpSocket->socketDescriptor())));
+
         }
         else
         {
@@ -75,7 +81,7 @@ void MyTcpServer::slotServerRead()
             }
             else
             {
-                curr_mTcpSocket->write("Авторизуйтесь или зарегистрируйтесь чтобы получить доступ к полному функционалу.\n");
+                curr_mTcpSocket->write("Авторизуйтесь или зарегистрируйтесь чтобы получить доступ к полному функционалу.\r\n");
             }
         }
     }

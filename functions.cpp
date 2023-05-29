@@ -41,7 +41,7 @@ QByteArray login(QString username, QString password)
 
 QByteArray logout()
 {
-    return QByteArray("Выход\n");
+    return QByteArray("Выход произведен.\n");
 }
 
 QByteArray invalid()
