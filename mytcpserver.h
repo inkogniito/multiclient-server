@@ -23,6 +23,7 @@ public slots:
 private:
     QTcpServer * mTcpServer;
     QMap<int, QTcpSocket*> mTcpSocket;
+    QMap<int, int> authstat;
     int server_status;
 };
 #endif // MYTCPSERVER_H

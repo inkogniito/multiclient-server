@@ -19,5 +19,5 @@ QByteArray invalid();
 
 QByteArray help();
 
-QByteArray parse(QString message);
+QByteArray parse(QString request, int authval);
 #endif

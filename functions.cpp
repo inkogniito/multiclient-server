@@ -54,22 +54,31 @@ QByteArray help()
     return QByteArray("Cписок команд:\n1.reg - Регистрация(введите почту, имя пользователя и пароль через пробел.\n");
 }
 
-QByteArray parse(QString request)
+QByteArray parse(QString request, int authval)
 {
    QStringList req = request.left(request.length() - 2).split(" ");
-   if (req[0]=="help")
-       return help();
-   if (req[0]=="logout")
-       return logout();
+   if (authval==1)
+   {
+        if (req[0]=="help")
+            return help();
+        if (req[0]=="logout")
+            return logout();
+   }
 
     switch(req.size())
     {
         case 3:
-            if (req[0] == "login")
+            if (req[0] == "login" and authval == 0)
                 return login(req[1],req[2]);
+            else
+                if (req[0] == "login" and authval == 1)
+                    return "Вы уже авторизованы, воспользуйтесь командой logout.\n";
         case 4:
-            if (req[0] == "reg")
+            if (req[0] == "reg" and authval == 0)
                 return reg(req[1],req[2],req[3]);
+            else
+                if(req[0]=="reg" and authval == 1)
+                    return "Вы уже авторизованы, воспользуйтесь командой logout.\n";
     }
     return invalid();
 }
