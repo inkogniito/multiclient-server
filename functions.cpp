@@ -1,5 +1,23 @@
 #include "functions.h"
-#include "database.h" // Добавьте эту строку
+#include "database.h"
+#include "mst.cpp"
+#include <QByteArray>
+#include <QDebug>
+#include <QBuffer>
+#include <QDataStream>
+#include <vector>
+
+QByteArray convert(const std::vector<int>& data) {
+    QByteArray byteArray;
+    QDataStream stream(&byteArray, QIODevice::WriteOnly);
+
+    for (const auto& value : data) {
+        stream << value;
+    }
+
+    return byteArray;
+}
+
 
 QByteArray reg(QString email, QString username, QString password)
 {
@@ -38,6 +56,21 @@ QByteArray login(QString username, QString password)
     }
 }
 
+std::vector<int> mst(std::vector<std::vector<int>> graph)
+{
+    MinimumSpanningTreeFinder mstFinder;
+    std::vector<MinimumSpanningTreeFinder::Edge> minimumSpanningTree = mstFinder.findMinimumSpanningTree(graph);
+    std::vector<int> res;
+
+    for (const auto& edge : minimumSpanningTree)
+    {
+        res.push_back(edge.from);
+        res.push_back(edge.to);
+        res.push_back(edge.weight);
+    }
+
+    return res;
+}
 
 QByteArray logout()
 {
@@ -79,6 +112,36 @@ QByteArray parse(QString request, int authval)
             else
                 if(req[0]=="reg" and authval == 1)
                     return "Вы уже авторизованы, воспользуйтесь командой logout.\n";
+        default:
+            if (req[0]=="mst")
+            {
+                    if (req.size()%3==1)
+                    {
+                        std::vector<std::vector<int>> res;
+                        std::vector<int> temp;
+
+                        int i = 1;
+                        while (i<=req.size()-3)
+                        {
+                            temp.push_back(req[i].toInt());
+                            temp.push_back(req[i+1].toInt());
+                            temp.push_back(req[i+2].toInt());
+                            res.push_back(temp);
+                            temp.clear();
+                            i+=3;
+                        }
+
+                        QByteArray byteArray;
+                        byteArray.resize(mst(res).size() * sizeof(int));
+                        char* rawPtr = byteArray.data();
+                        for (const int& value : mst(res)) {
+                            memcpy(rawPtr, &value, sizeof(int));
+                            rawPtr += sizeof(int);
+                        }
+
+                        return byteArray;
+                    }
+            }
     }
     return invalid();
 }

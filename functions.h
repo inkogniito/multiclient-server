@@ -8,8 +8,9 @@
 #include <QSqlQuery>
 #include <QVariant>
 
-QByteArray reg(QString email, QString username, QString password);
+std::vector<int> mst(std::vector<std::vector<int>> graph);
 
+QByteArray reg(QString email, QString username, QString password);
 
 QByteArray login(QString username, QString password);
 
@@ -20,4 +21,4 @@ QByteArray invalid();
 QByteArray help();
 
 QByteArray parse(QString request, int authval);
-#endif
+#endif //FUNCTIONS_H

@@ -57,6 +57,7 @@ void MyTcpServer::slotServerRead()
     {
         arval = QString::fromUtf8(array);
         arr = arval.left(arval.length() - 2).split(" ");
+
         if (authstat.value(curr_mTcpSocket->socketDescriptor()) == 1)
         {
             if (arr.size() == 1 and arr[0] == "logout")
@@ -65,7 +66,9 @@ void MyTcpServer::slotServerRead()
                 authstat[curr_mTcpSocket->socketDescriptor()] = 0;
             }
             else
+            {
                 curr_mTcpSocket->write(parse(array, authstat.value(curr_mTcpSocket->socketDescriptor())));
+            }
 
         }
         else

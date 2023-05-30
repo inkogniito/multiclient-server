@@ -22,6 +22,7 @@ SOURCES += \
     database.cpp \
     functions.cpp \
         main.cpp \
+    mst.cpp \
     mytcpserver.cpp
 
 # Default rules for deployment.
