@@ -87,6 +87,7 @@ void MyTcpServer::slotServerRead()
                 curr_mTcpSocket->write("Авторизуйтесь или зарегистрируйтесь чтобы получить доступ к полному функционалу.\r\n");
             }
         }
+
     }
 }
 

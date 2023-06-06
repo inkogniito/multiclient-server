@@ -132,13 +132,16 @@ QByteArray parse(QString request, int authval)
                         }
 
                         QByteArray byteArray;
-                        byteArray.resize(mst(res).size() * sizeof(int));
-                        char* rawPtr = byteArray.data();
-                        for (const int& value : mst(res)) {
-                            memcpy(rawPtr, &value, sizeof(int));
-                            rawPtr += sizeof(int);
+                        QDataStream stream(&byteArray, QIODevice::WriteOnly);
+                        std::vector<int> data = mst(res);
+
+                        for (int i = 0; i < data.size(); i++) {
+                            byteArray.append(QByteArray::number(data[i]));
+                            byteArray.append(" ");
                         }
 
+                        QString str = "\n";
+                        byteArray.push_back(str.toUtf8());
                         return byteArray;
                     }
             }
